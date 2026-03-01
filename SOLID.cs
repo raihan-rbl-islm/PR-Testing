@@ -77,6 +77,11 @@ public class Intern : Employee
 
     public override double CalculateBonus() => Salary * 0.05;
 }
+public class EmployeeOnContract : Employee
+{
+    public override double CalculateBonus() => Salary * 0.15;
+
+}
 
 public interface IEmployeeRepository
 {
@@ -112,14 +117,21 @@ class Program
     {
         Employee intern = new Intern("Mim", 10000);
         Employee permanent = new PermanentEmployee("Mahjabin", 50000);
+        Employee contractWorker = new EmployeeOnContract("Raihan", 25000);
 
         Console.WriteLine($"Intern bonus: {intern.CalculateBonus()}");
         Console.WriteLine($"Permanent bonus: {permanent.CalculateBonus()}");
+        Console.WriteLine($"Contract bonus: {contractWorker.CalculateBonus()}");
 
         intern.Work();
         intern.Eat();
         intern.Sleep();
         intern.SendReport();
+
+        contractWorker.Work();
+        contractWorker.Eat();
+        contractWorker.Sleep();
+        contractWorker.SendReport();
 
         IEmployeeRepository repository = new FileEmployeeRepository();
         repository.Save(intern);
@@ -127,5 +139,7 @@ class Program
         IMessageSender emailSender = new EmailSender();
         NotificationService notifier = new NotificationService(emailSender);
         notifier.Notify(intern);
+
+        notifier.Notify(contractWorker);
     }
 }
